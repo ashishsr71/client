@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://ashishsr71:Daksh2015@cluster0.g0atuug.mongodb.net/commerce";
+const MONGODB_URI = process.env.MONGODB_URI || ""
 
 if (!MONGODB_URI) {
   throw new Error(
@@ -29,7 +29,7 @@ async function connectToDatabase() {
       return mongoose;
     });
   }
-  
+
   try {
     cached.conn = await cached.promise;
     console.log("MongoDB connected successfully");
