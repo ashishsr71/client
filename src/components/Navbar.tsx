@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 import { Home, LogOut, Bell, Menu, X } from "lucide-react";
 import ShoppingCartIcon from "./ShoppingCartIcon";
 import { useAuthStore } from "@/stores/authStore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
 // Use Date object or simple relative time formatting for real notifications
 const formatTime = (dateString: string) => {
@@ -93,7 +93,9 @@ const Navbar = () => {
       {/* RIGHT - DESKTOP MENU */}
       <div className="hidden md:flex items-center gap-6 z-50">
         <div className="w-64">
-           <SearchBar />
+           <Suspense fallback={<div className="h-8 w-full bg-gray-100 rounded animate-pulse" />}>
+             <SearchBar />
+           </Suspense>
         </div>
         <Link href="/">
           <Home className="w-5 h-5 text-gray-600 hover:text-cyan-500 transition-colors"/>
@@ -179,7 +181,9 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div className="absolute top-full left-0 w-full min-h-[calc(100vh-80px)] bg-white/95 backdrop-blur-md flex flex-col p-6 gap-6 z-40 md:hidden animate-in slide-in-from-top-2 duration-300">
           <div className="w-full">
-            <SearchBar />
+            <Suspense fallback={<div className="h-8 w-full bg-gray-100 rounded animate-pulse" />}>
+              <SearchBar />
+            </Suspense>
           </div>
           
           <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 text-zinc-700 font-medium text-lg hover:text-cyan-600 transition-colors mt-2">
