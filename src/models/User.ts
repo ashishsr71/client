@@ -26,6 +26,16 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    addresses: [
+      {
+        street: String,
+        city: String,
+        state: String,
+        zipCode: String,
+        country: String,
+        isDefault: { type: Boolean, default: false },
+      },
+    ],
   },
   { timestamps: true }
 );

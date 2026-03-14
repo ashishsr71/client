@@ -80,15 +80,27 @@ const OrdersPage = () => {
                      {order.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Credit Card'}
                    </span>
                 </div>
-                
+
                 <div className="flex flex-col items-start md:items-end gap-2">
-                   <p className="text-[10px] text-zinc-400 font-bold tracking-widest uppercase">Status</p>
+                   <p className="text-[10px] text-zinc-400 font-bold tracking-widest uppercase">Payment</p>
                    <span className={`px-4 py-1.5 text-xs font-semibold rounded-full border shadow-sm ${
                      order.status === 'success' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 
                      order.status === 'pending' ? 'bg-blue-50 text-blue-700 border-blue-200' : 
                      'bg-red-50 text-red-700 border-red-200'
                    }`}>
                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                   </span>
+                </div>
+
+                <div className="flex flex-col items-start md:items-end gap-2">
+                   <p className="text-[10px] text-zinc-400 font-bold tracking-widest uppercase">Tracking</p>
+                   <span className={`px-4 py-1.5 text-xs font-semibold rounded-full border shadow-sm ${
+                     order.trackingStatus === 'delivered' ? 'bg-green-50 text-green-700 border-green-200' : 
+                     order.trackingStatus === 'out_for_delivery' ? 'bg-amber-50 text-amber-700 border-amber-200' : 
+                     order.trackingStatus === 'shipped' ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 
+                     'bg-gray-50 text-gray-700 border-gray-200'
+                   }`}>
+                     {(order.trackingStatus || 'processing').replace(/_/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase())}
                    </span>
                 </div>
               </div>

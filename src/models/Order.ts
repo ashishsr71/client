@@ -7,6 +7,14 @@ export interface IOrder extends mongoose.Document {
   amount: number;
   paymentMethod: "Card" | "COD";
   status: "pending" | "success" | "failed";
+  shippingAddress?: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+  };
+  trackingStatus: "processing" | "shipped" | "out_for_delivery" | "delivered";
 }
 
 const OrderSchema = new mongoose.Schema<IOrder>(
@@ -37,6 +45,18 @@ const OrderSchema = new mongoose.Schema<IOrder>(
       type: String,
       enum: ["pending", "success", "failed"],
       default: "pending",
+    },
+    shippingAddress: {
+      street: String,
+      city: String,
+      state: String,
+      zipCode: String,
+      country: String,
+    },
+    trackingStatus: {
+      type: String,
+      enum: ["processing", "shipped", "out_for_delivery", "delivered"],
+      default: "processing",
     },
   },
   { timestamps: true }

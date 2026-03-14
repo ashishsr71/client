@@ -3,6 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useAuthStore } from "@/stores/authStore";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 const ShippingForm = ({
   setShippingForm,
@@ -12,10 +15,32 @@ const ShippingForm = ({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<ShippingFormInputs>({
     resolver: zodResolver(shippingFormSchema),
   });
+
+  const { user, isAuthenticated } = useAuthStore();
+  const [addresses, setAddresses] = useState<any[]>([]);
+  const [loadingAddresses, setLoadingAddresses] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated && user?.id) {
+      setLoadingAddresses(true);
+      fetch(`/api/users/${user.id}/addresses`)
+        .then(res => res.json())
+        .then(data => setAddresses(data.addresses || []))
+        .catch(() => toast.error("Failed to fetch saved addresses"))
+        .finally(() => setLoadingAddresses(false));
+    }
+  }, [isAuthenticated, user?.id]);
+
+  const handleUseAddress = (addr: any) => {
+    // We update fields programmatically. Since react-hook-form validates onSubmit,
+    // we use reset or setValue. Since setValue isn't destructured, we need it.
+    // Let me update the destructure above to include setValue first.
+  };
 
   const router = useRouter();
 
@@ -24,11 +49,41 @@ const ShippingForm = ({
     router.push("/cart?step=3", { scroll: false });
   };
 
+  const handleUseSavedAddress = (addr: any) => {
+    if (user) {
+      setValue("name", user.name || "");
+      setValue("email", user.email || "");
+    }
+    setValue("address", addr.street);
+    setValue("city", addr.city);
+    // phone is typically not saved in the basic address model here, so we let the user fill it or keep it.
+  };
+
   return (
-    <form
-      className="flex flex-col gap-4"
-      onSubmit={handleSubmit(handleShippingForm)}
-    >
+    <div className="flex flex-col gap-6">
+      {addresses.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-gray-700">Quick fill from saved addresses:</label>
+          <div className="flex gap-2 min-x-auto overflow-x-auto pb-2 noscrollbar">
+            {addresses.map((addr) => (
+              <button
+                key={addr._id}
+                type="button"
+                onClick={() => handleUseSavedAddress(addr)}
+                className="whitespace-nowrap px-4 py-2 border border-cyan-200 bg-cyan-50 text-cyan-800 rounded-lg text-xs font-semibold hover:bg-cyan-100 transition-colors"
+                title={`${addr.street}, ${addr.city}, ${addr.state}`}
+              >
+                {addr.street}, {addr.city}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={handleSubmit(handleShippingForm)}
+      >
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className="text-xs text-gray-500 font-medium">
           Name
@@ -112,6 +167,7 @@ const ShippingForm = ({
         <ArrowRight className="w-3 h-3" />
       </button>
     </form>
+    </div>
   );
 };
 
