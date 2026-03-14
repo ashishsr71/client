@@ -34,6 +34,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       maxlength: 500,
     },
+    resetPasswordOtp: String,
+    resetPasswordExpires: Date,
+    lastOtpRequestedAt: Date,
     addresses: [
       {
         street: String,
