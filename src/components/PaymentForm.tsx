@@ -1,4 +1,4 @@
-import { PaymentFormInputs, paymentFormSchema } from "@/types";
+import { PaymentFormInputs, paymentFormSchema, ShippingFormInputs } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, ShoppingCart, Banknote, CreditCard } from "lucide-react";
 import Image from "next/image";
@@ -9,7 +9,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
-const PaymentForm = () => {
+const PaymentForm = ({ shippingForm }: { shippingForm: ShippingFormInputs }) => {
   const [method, setMethod] = useState<"Card" | "COD" | null>(null);
   const { cart, clearCart } = useCartStore();
   const { user } = useAuthStore();
@@ -54,7 +54,14 @@ const PaymentForm = () => {
           email: user.email,
           amount,
           paymentMethod: data.paymentMethod || method,
-          status: (data.paymentMethod || method) === "COD" ? "pending" : "success" // Mock payment gateway
+          status: (data.paymentMethod || method) === "COD" ? "pending" : "success", // Mock payment gateway
+          shippingAddress: {
+            street: shippingForm.address,
+            city: shippingForm.city,
+            state: "N/A",
+            zipCode: "N/A",
+            country: "N/A",
+          }
         })
       });
 
