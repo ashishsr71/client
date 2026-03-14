@@ -26,6 +26,14 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    phone: {
+      type: String,
+      maxlength: 20,
+    },
+    bio: {
+      type: String,
+      maxlength: 500,
+    },
     addresses: [
       {
         street: String,

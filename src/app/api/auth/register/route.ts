@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret_for_development";
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
-    const { name, email, password } = await req.json();
+    const { name, email, password, phone, bio } = await req.json();
 
     if (!name || !email || !password) {
       return NextResponse.json(
@@ -33,6 +33,8 @@ export async function POST(req: Request) {
       name,
       email,
       password: hashedPassword,
+      phone,
+      bio,
     });
 
     const token = jwt.sign(

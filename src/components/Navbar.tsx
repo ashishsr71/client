@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import SearchBar from "./SearchBar";
-import { Home, LogOut, Bell, Menu, X, MapPin } from "lucide-react";
+import { Home, LogOut, Bell, Menu, X, MapPin, Package } from "lucide-react";
 import ShoppingCartIcon from "./ShoppingCartIcon";
 import { useAuthStore } from "@/stores/authStore";
 import { useEffect, useState, Suspense } from "react";
@@ -149,11 +149,14 @@ const Navbar = () => {
         
         {mounted && isAuthenticated ? (
            <div className="flex items-center gap-3">
-             <Link href="/orders" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+             <Link href="/profile" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-100 text-cyan-800 font-bold text-sm shadow-sm border border-cyan-200">
                  {user?.name?.charAt(0).toUpperCase()}
                </div>
-               <span className="text-sm font-medium text-zinc-700">Orders</span>
+               <span className="text-sm font-medium text-zinc-700">Profile</span>
+             </Link>
+             <Link href="/orders" className="text-sm font-medium text-zinc-700 hover:text-cyan-500 transition-colors ml-2">
+               Orders
              </Link>
              <Link href="/addresses" className="flex items-center gap-2 hover:opacity-80 transition-opacity ml-2">
                <MapPin className="w-5 h-5 text-gray-600 hover:text-cyan-500 transition-colors" />
@@ -237,10 +240,14 @@ const Navbar = () => {
           {/* Mobile User Controls */}
           {mounted && isAuthenticated ? (
              <div className="flex flex-col gap-6 w-full">
-                <Link href="/orders" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 text-zinc-700 font-medium text-lg hover:text-cyan-600 transition-colors">
+                <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 text-zinc-700 font-medium text-lg hover:text-cyan-600 transition-colors">
                   <div className="flex items-center justify-center w-7 h-7 rounded-full bg-cyan-100 text-cyan-800 font-bold text-sm shadow-sm ring-1 ring-cyan-200">
                     {user?.name?.charAt(0).toUpperCase()}
                   </div>
+                  Your Profile
+                </Link>
+                <Link href="/orders" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 text-zinc-700 font-medium text-lg hover:text-cyan-600 transition-colors">
+                  <Package className="w-6 h-6 text-zinc-400" />
                   Your Orders
                 </Link>
                 <Link href="/addresses" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 text-zinc-700 font-medium text-lg hover:text-cyan-600 transition-colors">
