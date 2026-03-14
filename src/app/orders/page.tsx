@@ -104,6 +104,15 @@ const OrdersPage = () => {
                    </span>
                 </div>
               </div>
+
+              {order.shippingAddress && (
+                <div className="w-full mt-4 pt-4 border-t border-zinc-100 flex flex-col gap-1">
+                   <p className="text-[10px] text-zinc-400 font-bold tracking-widest uppercase">Shipping To</p>
+                   <p className="text-sm font-medium text-zinc-700">
+                     {order.shippingAddress.street}, {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zipCode}, {order.shippingAddress.country}
+                   </p>
+                </div>
+              )}
             </div>
           ))}
         </div>
